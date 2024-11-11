@@ -1,0 +1,144 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>RF-Solver-Edit</title>
+<link href="./style.css" rel="stylesheet">
+<!-- <script type="text/javascript" src="./DreamBooth_files/jquery.js"></script> -->
+</head>
+
+<body>
+<div class="content";>
+  <h1 style="font-family: 'Times New Roman', Times, serif; font-size: 42px;">
+    <strong>Taming Rectified Flow for Inversion and Editing</strong>
+</h1>
+  <!-- <h2 style="text-align:center;">CVPR 2024</h2> -->
+  <p id="authors" style="font-family: 'Times New Roman', Times, serif;font-size: 20px;"><a href="https://scholar.google.com/citations?hl=en&user=HoKoCv0AAAAJ" >Jiangshan Wang<sup>1,2</sup></a> 
+    <a href="https://pujunfu.github.io/"  >Junfu Pu<sup>2</sup></a> 
+    <a href="https://scholar.google.com/citations?hl=en&user=zJvrrusAAAAJ&view_op=list_works&sortby=pubdate"  >Zhongang Qi<sup>2</sup></a>
+    <a href="https://www.jiayiguo.net/"  >Jiayi Guo<sup>1</sup></a> 
+    <a href="https://mayuelala.github.io/"  >Yue Ma<sup>3</sup></a> <br>
+    <a href="https://scholar.google.com/citations?user=wTmPkSsAAAAJ&hl=en"  >Nisha Huang<sup>1</sup></a> 
+    <a href="https://scholar.google.com/citations?hl=en&user=dEm4OKAAAAAJ"  >Yuxin Chen<sup>2</sup></a> 
+    <a href="https://scholar.google.com/citations?user=Xrh1OIUAAAAJ&hl=en&oi=ao"  >Xiu Li<sup>1</sup></a> 
+    <a href="https://scholar.google.com/citations?hl=en&user=4oXBp9UAAAAJ&view_op=list_works&sortby=pubdate"  >Ying Shan<sup>2</sup></a><br>
+
+    <span style="font-size: 20px"><br>
+        <b><sup>1</sup> Tsinghua University  <sup>2</sup> Tencent ARC lab <sup>3</sup> HKUST <br> </b>
+        </p>
+    <font size="+2">
+          <p style="text-align: center;">
+            <a href="./data/rf-solver-edit.pdf" target="_blank">[Paper]</a> &nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="https://arxiv.org/abs/2411.04746" target="_blank">[arXiv]</a> &nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="https://github.com/wangjiangshan0725/RF-Solver-Edit" target="_blank">[Code]</a> &nbsp;&nbsp;&nbsp;&nbsp;
+          </p>
+    </font>
+  <img src="./data/teaser.jpg" class="teaser-gif" style="width:100%;">    
+    <p style="font-family: 'Times New Roman', Times, serif; font-size: 20px;"> We propose <strong>RF-Solver</strong> to solve the rectified flow ODE with less error, thus enhancing both sampling quality and inversion
+      reconstruction accuracy for rectified-flow-based generative models. Furthermore, we propose <strong>RF-Edit</strong> to leverage the RF-Solver for image
+       and video editing tasks. Our methods achieve impressive performance on various tasks, including text-to-image generation, image & video
+       inversion, and image & video editing.</p>
+</div>
+
+
+<div class="content">
+  <h2 style="text-align:center;font-family: 'Times New Roman', Times, serif;font-size: 40px;">Abstract</h2>
+  <p style="font-family: 'Times New Roman', Times, serif;font-size: 20px;">Rectified-flow-based diffusion transformers, such as FLUX and OpenSora, have demonstrated exceptional performance in the field of image and video generation. Despite their robust generative capabilities, these models often suffer from inaccurate inversion, which could further limit their effectiveness in downstream tasks such as image and video editing. To address this issue, we propose RF-Solver, a novel training-free sampler that enhances inversion precision by reducing errors in the process of solving rectified flow ODEs. Specifically, we derive the exact formulation of the rectified flow ODE and perform a high-order Taylor expansion to estimate its nonlinear components, significantly decreasing the approximation error at each timestep. Building upon RF-Solver, we further design RF-Edit, which comprises specialized sub-modules for image and video editing. By sharing self-attention layer features during the editing process, RF-Edit effectively preserves the structural information of the source image or video while achieving high-quality editing results. Our approach is compatible with any pre-trained rectified-flow-based models for image and video tasks, requiring no additional training or optimization. Extensive experiments on text-to-image generation, image & video inversion, and image & video editing demonstrate the robust performance and adaptability of our methods.</p>
+</div>
+
+
+<div class="content">
+    <h2 style="font-family: 'Times New Roman', Times, serif;font-size: 40px;">Contributions</h2>
+    <ul>
+      <li style="font-family: 'Times New Roman', Times, serif;font-size: 20px;">We propose RF-Solver, a training-free sampler that significantly reduces errors in the inversion and reconstruction processes of the rectified-flow model.</li>
+      <p></p>
+      <li style="font-family: 'Times New Roman', Times, serif;font-size: 20px;">We present RF-Edit, which leverages RF-Solver for image and video editing, effectively preserving the structural integrity of the source image/video while achieving high-quality results.
+      </li>
+      <p></p>
+      <li style="font-family: 'Times New Roman', Times, serif;font-size: 20px;">Extensive experiments on images and videos demonstrate the efficacy of our methods, showcasing superior performance in both inversion and high-quality editing compared to various existing baselines.</li>
+    </ul>        
+    </div>
+
+<div class="content">        
+    <h2 style="font-family: 'Times New Roman', Times, serif;font-size: 40px;">RF-Solver</h2>
+    <p style="font-family: 'Times New Roman', Times, serif;font-size: 20px;">The vanilla rectified flow (RF) sampler demonstrates strong performance in image and video generation. However, when applied to inversion and reconstruction tasks, we observe significant error accumulation at each timestep.
+      This results in reconstructions that diverge notably from the original image, further limiting the performance of RF-based models in various downstream tasks, such as image and video editing.</p>
+    <img class="summary-img" src="./data/insight.jpg" style="width:50%;"> <br>
+    <p style="font-family: 'Times New Roman', Times, serif;font-size: 20px;">Delving into this problem, we notice that the inversion and reconstruction processes in rectified flow rely on estimating an approximate solution of the rectified flow ODE at each timestep. 
+      Obtaining more precise solutions for the ODE would effectively mitigate these errors, leading to improved reconstruction quality. Based on this analysis, we propose RF-Solver Algorithm.</p>
+    <img class="summary-img" src="./data/Algorithm.jpg" style="width:50%;"> <br>
+    
+  </div>
+
+<div class="content">
+  <h2 style="font-family: 'Times New Roman', Times, serif;font-size: 40px;">RF-Edit</h2>
+  <p style="font-family: 'Times New Roman', Times, serif;font-size: 20px;">The proposed RF-Edit framework enables high-quality editing while preserving structural information.
+    Building on this concept, we design two sub-modules for RF-Edit, specifically tailored for image editing and video editing. 
+    For image editing, we use FLUX as the backbone. 
+    For video editing, we employ OpenSora as the backbone. 
+    </p>
+  <br>
+  <img class="summary-img" src="./data/RF-Edit.jpg" style="width:90%;"> 
+  
+</div>
+
+
+<div id="results" class="content">
+  <h2 style="font-family: 'Times New Roman', Times, serif;font-size: 40px;">Text-to-Image Generation Results</h2>      
+  <img class="summary-img" src="./data/sampling.jpg" style="width:80%;">
+  <p style="font-family: 'Times New Roman', Times, serif;font-size: 20px;">We compare the performance of our method with the vanilla rectified flow on the text-to-image generation task. 
+    Both the quantitative and qualitative results demonstrate the superior performance of RF-Solver in fundamental T2I generation tasks, producing higher-quality images that align more closely with human cognition.
+    </p>
+</div>
+
+<div id="results2" class="content">
+  <h2 style="font-family: 'Times New Roman', Times, serif;font-size: 40px;"> Inversion and Reconstruction Results</h2>
+
+    <img class="summary-img" src="./data/inversion.jpg" style="width:100%;">
+    <p style="font-family: 'Times New Roman', Times, serif;font-size: 20px;">  RF-Solver effectively reduces the error in the solution of RF ODE, thereby increasing the accuracy of the reconstruction. 
+The image reconstruction results using vanilla rectified flow exhibit noticeable drift from the source image, with significant alterations to the appearance of subjects in the image.
+For video reconstruction, the baseline reconstruction results suffer from distortion. 
+In contrast, RF-Solver significantly alleviates these issues, achieving more satisfactory results.</p>
+
+</div>
+
+<div id="results2" class="content">
+  <h2 style="font-family: 'Times New Roman', Times, serif;font-size: 40px;"> Image Editing Results</h2>
+
+    <img class="summary-img" src="./data/image_edit.jpg" style="width:100%;">
+    <p style="font-family: 'Times New Roman', Times, serif;font-size: 20px;">  We compare the performance of our methods with several baselines across different types of editing. 
+      The baseline methods often suffer from background changes or fail to perform the desired edits. 
+      In contrast, our methods demonstrate satisfying performance, effectively achieves a balanced trade-off between the fidelity to the target prompt and preservation of the source image. 
+      To be noticed, although RF-inversion also uses the rectified flow model for image editing (third row), the structure of the source image which is unrelated to editing prompt (such as background and human appearance) is modified obviously. </p>
+
+</div>
+
+<div id="results2" class="content">
+  <h2 style="font-family: 'Times New Roman', Times, serif;font-size: 40px;"> Video Editing Results</h2>
+
+    <img class="summary-img" src="./data/video_edit.jpg" style="width:100%;">
+    <p style="font-family: 'Times New Roman', Times, serif;font-size: 20px;">  For video editing, we primarily evaluate the performance of our methods on long videos (200 frames) and high-resolution videos. 
+      Furthermore, we assess the performance on complicated videos and prompts where there are multiple objects in the video, and the user has different editing requirements for each object.
+      Our method successfully handles complicated editing cases (e.g., modifying the leftmost lion among three lions into a white polar bear and changing the other two small lions into orange tiger cubs), whereas all other baseline methods fail in this scenario. 
+      Our method also demonstrates strong performance in global editing tasks, such as transforming scenes into autumn. </p>
+
+</div>
+
+
+<div class="content">
+  <h2 style="font-family: 'Times New Roman', Times, serif;font-size: 30px;">BibTex</h2>
+  <code> @misc{wang2024tamingrectifiedflowinversion,<br>
+  &nbsp;&nbsp;title={Taming Rectified Flow for Inversion and Editing}, <br>
+  &nbsp;&nbsp;author={Jiangshan Wang and Junfu Pu and Zhongang Qi and Jiayi Guo and Yue Ma and Nisha Huang and Yuxin Chen and Xiu Li and Ying Shan},<br>
+  &nbsp;&nbsp;year={2024},<br>
+  &nbsp;&nbsp;eprint={2411.04746},<br>
+  &nbsp;&nbsp;archivePrefix={arXiv},<br>
+  &nbsp;&nbsp;primaryClass={cs.CV},<br>
+  &nbsp;&nbsp;url={https://arxiv.org/abs/2411.04746}, <br>
+  } </code> 
+</div>
+
+
+</body>
+
+
+</html>
