@@ -33,16 +33,7 @@
           </p>
     </font>
   <img src="./data/teaser.jpg" class="teaser-gif" style="width:100%;">    
-    <p style="font-family: 'Times New Roman', Times, serif; font-size: 20px;"> We propose <strong>RF-Solver</strong> to solve the rectified flow ODE with less error, thus enhancing both sampling quality and inversion
-      reconstruction accuracy for rectified-flow-based generative models. Furthermore, we propose <strong>RF-Edit</strong> to leverage the RF-Solver for image
-       and video editing tasks. Our methods achieve impressive performance on various tasks, including text-to-image generation, image & video
-       inversion, and image & video editing.</p>
-</div>
-
-
-<div class="content">
-  <h2 style="text-align:center;font-family: 'Times New Roman', Times, serif;font-size: 40px;">Abstract</h2>
-  <p style="font-family: 'Times New Roman', Times, serif;font-size: 20px;">Rectified-flow-based diffusion transformers, such as FLUX and OpenSora, have demonstrated exceptional performance in the field of image and video generation. Despite their robust generative capabilities, these models often suffer from inaccurate inversion, which could further limit their effectiveness in downstream tasks such as image and video editing. To address this issue, we propose RF-Solver, a novel training-free sampler that enhances inversion precision by reducing errors in the process of solving rectified flow ODEs. Specifically, we derive the exact formulation of the rectified flow ODE and perform a high-order Taylor expansion to estimate its nonlinear components, significantly decreasing the approximation error at each timestep. Building upon RF-Solver, we further design RF-Edit, which comprises specialized sub-modules for image and video editing. By sharing self-attention layer features during the editing process, RF-Edit effectively preserves the structural information of the source image or video while achieving high-quality editing results. Our approach is compatible with any pre-trained rectified-flow-based models for image and video tasks, requiring no additional training or optimization. Extensive experiments on text-to-image generation, image & video inversion, and image & video editing demonstrate the robust performance and adaptability of our methods.</p>
+    <p style="font-family: 'Times New Roman', Times, serif; font-size: 20px;">  We propose <strong>RF-Solver</strong> to solve the rectified flow ODE with reduced error, thereby enhancing both sampling quality and inversion-reconstruction accuracy for rectified-flow-based generative models. Furthermore, we propose <strong>RF-Edit</strong>, which utilizes the RF-Solver for image and video editing tasks. Our methods demonstrate impressive performance across generation, inversion, and editing tasks in both image and video modalities. </p>
 </div>
 
 
@@ -83,7 +74,7 @@
 
 
 <div id="results" class="content">
-  <h2 style="font-family: 'Times New Roman', Times, serif;font-size: 40px;">Text-to-Image Generation Results</h2>      
+  <h2 style="font-family: 'Times New Roman', Times, serif;font-size: 40px;">Text-to-Image Generation</h2>      
   <img class="summary-img" src="./data/sampling.jpg" style="width:80%;">
   <p style="font-family: 'Times New Roman', Times, serif;font-size: 20px;">We compare the performance of our method with the vanilla rectified flow on the text-to-image generation task. 
     Both the quantitative and qualitative results demonstrate the superior performance of RF-Solver in fundamental T2I generation tasks, producing higher-quality images that align more closely with human cognition.
@@ -91,7 +82,7 @@
 </div>
 
 <div id="results2" class="content">
-  <h2 style="font-family: 'Times New Roman', Times, serif;font-size: 40px;"> Inversion and Reconstruction Results</h2>
+  <h2 style="font-family: 'Times New Roman', Times, serif;font-size: 40px;"> Inversion and Reconstruction</h2>
 
     <img class="summary-img" src="./data/inversion.jpg" style="width:100%;">
     <p style="font-family: 'Times New Roman', Times, serif;font-size: 20px;">  RF-Solver effectively reduces the error in the solution of RF ODE, thereby increasing the accuracy of the reconstruction. 
@@ -101,19 +92,28 @@ In contrast, RF-Solver significantly alleviates these issues, achieving more sat
 
 </div>
 
+
+
 <div id="results2" class="content">
-  <h2 style="font-family: 'Times New Roman', Times, serif;font-size: 40px;"> Image Editing Results</h2>
+  <h2 style="font-family: 'Times New Roman', Times, serif;font-size: 40px;"> Image Editing</h2>
 
     <img class="summary-img" src="./data/image_edit.jpg" style="width:100%;">
-    <p style="font-family: 'Times New Roman', Times, serif;font-size: 20px;">  We compare the performance of our methods with several baselines across different types of editing. 
+    <p style="font-family: 'Times New Roman', Times, serif;font-size: 20px;">  We compare the performance of our methods with several baselines across different types of editing and Stylization. 
       The baseline methods often suffer from background changes or fail to perform the desired edits. 
       In contrast, our methods demonstrate satisfying performance, effectively achieves a balanced trade-off between the fidelity to the target prompt and preservation of the source image. 
       To be noticed, although RF-inversion also uses the rectified flow model for image editing (third row), the structure of the source image which is unrelated to editing prompt (such as background and human appearance) is modified obviously. </p>
-
 </div>
 
 <div id="results2" class="content">
-  <h2 style="font-family: 'Times New Roman', Times, serif;font-size: 40px;"> Video Editing Results</h2>
+  <h2 style="font-family: 'Times New Roman', Times, serif;font-size: 40px;"> Image Stylization</h2>
+
+    <img class="summary-img" src="./data/style.jpg" style="width:100%;">
+    <p style="font-family: 'Times New Roman', Times, serif;font-size: 20px;">  Our method also illustrates impressive performance on image stylization, effectively generating images that are well-aligned with the reference style. </p>
+</div>
+
+
+<div id="results2" class="content">
+  <h2 style="font-family: 'Times New Roman', Times, serif;font-size: 40px;"> Video Editing</h2>
 
     <img class="summary-img" src="./data/video_edit.jpg" style="width:100%;">
     <p style="font-family: 'Times New Roman', Times, serif;font-size: 20px;">  For video editing, we primarily evaluate the performance of our methods on long videos (200 frames) and high-resolution videos. 
